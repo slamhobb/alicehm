@@ -38,6 +38,14 @@ class SmartHomeService:
                             "value": value
                         }
                     })
+                elif name == 'position':
+                    capabilities.append({
+                        "type": "devices.capabilities.range",
+                        "state": {
+                            "instance": "open",
+                            "value": value
+                        }
+                    })
             return capabilities
 
         def map_properties(device_data: dict) -> []:
@@ -64,6 +72,14 @@ class SmartHomeService:
                         "type": "devices.properties.float",
                         "state": {
                             "instance": "battery_level",
+                            "value": value
+                        }
+                    })
+                elif name == 'co2':
+                    properties.append({
+                        "type": "devices.properties.float",
+                        "state": {
+                            "instance": "co2_level",
                             "value": value
                         }
                     })
@@ -109,6 +125,10 @@ class SmartHomeService:
 
                 if cap_type == 'devices.capabilities.on_off' and instance == 'on':
                     self.device_client.set_switch_state(cfg_device_name, value)
+                    result_cap['state']['action_result']['status'] = 'DONE'
+
+                if cap_type == 'devices.capabilities.range' and instance == 'open':
+                    self.device_client.set_motor(cfg_device_name, value)
                     result_cap['state']['action_result']['status'] = 'DONE'
 
                 result_capabilities.append(result_cap)

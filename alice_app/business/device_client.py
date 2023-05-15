@@ -20,3 +20,11 @@ class DeviceClient:
         }
         requests.post(url, data)
 
+    @staticmethod
+    def set_motor(device_name: str, position: int):
+        url = f'{config.DEVICE_CTRL_SERVER_URL}/set-mqtt-motor'
+        data = {
+            "device_name": device_name,
+            "position": position
+        }
+        requests.post(url, data)
